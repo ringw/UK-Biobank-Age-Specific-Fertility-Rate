@@ -20,7 +20,7 @@ for chr in {1..22}; do
       -iin="UK-Biobank-Age-Specific-Fertility-Rate/data/gnomad.v3.1.pca_loadings_loc.bed" \
       "${inputfilearr[@]}" \
       "${inputfilearrtbi[@]}" \
-      -icmd="bcftools view --header-only ukb24310_c${chr}_b${index}_v1.vcf.gz >> variants_c${chr}_from${index}.vcf; for f in ukb24310_c${chr}_b*_v1.vcf.gz; do bcftools view -H -R gnomad.v3.1.pca_loadings_loc.bed \$f >> variants_c${chr}_from${index}.vcf; done" \
+      -icmd="bcftools view --header-only ukb24310_c${chr}_b${index}_v1.vcf.gz -Oz >> variants_c${chr}_from${index}.vcf.gz; for f in ukb24310_c${chr}_b*_v1.vcf.gz; do bcftools view -H -R gnomad.v3.1.pca_loadings_loc.bed \$f -Oz >> variants_c${chr}_from${index}.vcf.gz; done" \
       -imount_inputs=true
     index=$(( $stop + 1 ))
   done
