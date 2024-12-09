@@ -2,11 +2,11 @@
 
 set -e
 
-for chr in 1 2; do
+for chr in {1..22}; do
   nvcf=`grep ^chr$chr$'\t' data/DRAGEN_population_level_number_of_vcf.txt | cut -f 2`
   index=0
   while (( $index <= $nvcf )); do
-    stop=$(( $index + 1999 ))
+    stop=$(( $index + 499 ))
     if (( $stop > $nvcf )); then
       stop=$nvcf
     fi
@@ -20,9 +20,8 @@ for chr in 1 2; do
       -iin="UK-Biobank-Age-Specific-Fertility-Rate/data/gnomad.v3.1.pca_loadings_loc.bed" \
       "${inputfilearr[@]}" \
       "${inputfilearrtbi[@]}" \
-      -icmd="bcftools view -r gnomad.v3.1.pca_loadings_loc.bed ukb24310_c${chr}_b*_v1.vcf.gz -o variants_c${chr}_from${index}.vcf" \
+      -icmd="bcftools view --header-only ukb24310_c${chr}_b${index}_v1.vcf.gz >> variants_c${chr}_from${index}.vcf; for f in ukb24310_c${chr}_b*_v1.vcf.gz; do bcftools view -H -R gnomad.v3.1.pca_loadings_loc.bed \$f >> variants_c${chr}_from${index}.vcf; done" \
       -imount_inputs=true
     index=$(( $stop + 1 ))
-    false
   done
 done
